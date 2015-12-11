@@ -1,2 +1,2 @@
 # programming-pearls
-Programming Pearls test example by javascript
+Programming Pearls (Second Edition) example practice with Javascript
