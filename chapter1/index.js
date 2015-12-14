@@ -27,7 +27,9 @@ var getSortedBitArrayWithFile = function(path , callback){
 	s.on('data', function (line) {
 		// console.log(line);
 		bitArray.set(+line, true);
-	  s.next();
+		process.nextTick(function () {
+			s.next();
+		});
 	});
 	 
 	// 流结束时触发end事件 
@@ -37,26 +39,33 @@ var getSortedBitArrayWithFile = function(path , callback){
 	});
 }
 
-var writeSortedFileWithBitArray = function(path, bitArray){
-
+var writeSortedFileWithBitArray = function(path, bitArray ,cb){
+	var result = [];
 	for (var i = 0; i < MAX_LENGTH; i++){
 
 		if(bitArray.get(i)){
-			console.log(i);
-			fs.appendFileSync(path, i+'\n', 'utf8');
+			//console.log(i);
+			result.push(i)
+			//fs.appendFileSync(path, i+'\n', 'utf8');
 		}
 	}
+
+	fs.writeFile(path, result.join('\n'), 'utf8', cb);
 }
 
 var main = function(){
 	//genarage 1000000 phone numbers
 	genPhoneNumbersFile(__dirname + '/numberList.txt', function(){
+
+		console.time('sort 1,000,000 phone numbers');
 		//transform phone numbers to bit array
 		getSortedBitArrayWithFile(__dirname + '/numberList.txt', function(bitArray){
 
 			//transform bit array to sorted phone numbers
-			writeSortedFileWithBitArray(__dirname + '/numberList.sorted.txt',bitArray)
-
+			writeSortedFileWithBitArray(__dirname + '/numberList.sorted.txt',bitArray , function(e){
+				console.timeEnd('sort 1,000,000 phone numbers');
+			})
+			
 		})
 
 	});

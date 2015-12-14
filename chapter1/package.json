@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "bit-array": "^0.2.2",
     "faker": "^3.0.1",
     "lei-stream": "^1.0.4"
   }
