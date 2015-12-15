@@ -3,6 +3,18 @@ var fs = require('fs');
 // faker.locale = 'zh_CN';
 
 var genPhoneNumbersFile = function(filePath ,cb){
+	//promise mode
+	if(!cb){
+		return new Promise(function(resolve, reject){
+			genPhoneNumbersFile(filePath , function(e, r){
+				if(e){
+					return reject(e);
+				}
+				return resolve(r);
+			});
+		});
+	}
+	
 	var numbers = new Set();
 
 	while(numbers.size < 1000000 ){
